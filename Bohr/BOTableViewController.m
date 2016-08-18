@@ -164,6 +164,16 @@
 		[self.tableView beginUpdates];
 		[self.tableView endUpdates];
 		[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+		
+		if (self.expansionIndexPath)
+		{
+			[self didExpandCell:cell atIndexPath:indexPath];
+		}
+		else
+		{
+			[self didCollapseCell:cell atIndexPath:indexPath];
+		}
+		
 	} else if (cell.destinationViewController) {
 		[self.navigationController pushViewController:cell.destinationViewController animated:YES];
 	} else if ([cell respondsToSelector:@selector(wasSelectedFromViewController:)]) {
@@ -274,5 +284,7 @@
 #pragma mark Subclassing
 
 - (void)setup {}
+- (void)didExpandCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {}
+- (void)didCollapseCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {}
 
 @end

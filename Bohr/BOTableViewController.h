@@ -20,4 +20,7 @@
 /// Adds a new section to the controller.
 - (void)addSection:(BOTableViewSection *)section;
 
+/// When a cell is expanded
+- (void)didExpandCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+
 @end
