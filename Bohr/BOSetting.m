@@ -8,21 +8,36 @@
 
 #import "BOSetting+Private.h"
 
+@interface BOSetting()
+@property (nonatomic) NSUserDefaults *userDefaults;
+@end
+
 @implementation BOSetting
 
-- (instancetype)initWithKey:(NSString *)key {
-	if (key) {
-		if (self = [super init]) {
-			_key = key;
-			[[NSUserDefaults standardUserDefaults] addObserver:self forKeyPath:self.key options:NSKeyValueObservingOptionNew context:nil];
-		}
-	}
-	
-	return self;
+- (instancetype)initWithKey:(NSString *)key userDefaults:(NSUserDefaults *)userDefaults {
+    if (key) {
+        if (self = [super init]) {
+            _key = key;
+            
+            if (userDefaults) {
+                self.userDefaults = userDefaults;
+            }
+            else {
+                self.userDefaults = [NSUserDefaults standardUserDefaults];
+            }
+            [self.userDefaults addObserver:self forKeyPath:self.key options:NSKeyValueObservingOptionNew context:nil];
+        }
+    }
+    
+    return self;
 }
 
 + (instancetype)settingWithKey:(NSString *)key {
-	return [[self alloc] initWithKey:key];
+	return [[self alloc] initWithKey:key userDefaults:nil];
+}
+
++ (instancetype)settingWithKey:(NSString *)key userDefaults:(NSUserDefaults *)userDefaults {
+    return [[self alloc] initWithKey:key userDefaults:userDefaults];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -31,12 +46,12 @@
 }
 
 - (id)value {
-	return [[NSUserDefaults standardUserDefaults] objectForKey:self.key];
+	return [self.userDefaults objectForKey:self.key];
 }
 
 - (void)setValue:(id)value {
 	if (self.value != value) {
-		[[NSUserDefaults standardUserDefaults] setObject:value forKey:self.key];
+		[self.userDefaults setObject:value forKey:self.key];
 	}
 }
 
@@ -46,7 +61,7 @@
 }
 
 - (void)dealloc {
-	if (self.key) [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:self.key];
+	if (self.key) [self.userDefaults removeObserver:self forKeyPath:self.key];
 }
 
 @end

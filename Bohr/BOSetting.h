@@ -19,4 +19,7 @@
 /// Instantiates a new BOSetting object with a key.
 + (instancetype)settingWithKey:(NSString *)key;
 
+/// Instantiates a new BOSetting object with a key, and user defaults
++ (instancetype)settingWithKey:(NSString *)key userDefaults:(NSUserDefaults *)userDefaults;
+
 @end

@@ -20,20 +20,20 @@
 
 @implementation BOTableViewCell
 
-- (instancetype)initWithTitle:(NSString *)title key:(NSString *)key handler:(void (^)(id cell))handler {
-	if (self = [self initWithStyle:(key ? UITableViewCellStyleValue1 : UITableViewCellStyleDefault) reuseIdentifier:nil]) {
-		self.selectionStyle = UITableViewCellSelectionStyleNone;
-		[self setup];
-		if (handler) handler(self);
-		self.preservesSuperviewLayoutMargins = NO;
-		self.clipsToBounds = YES;
-		self.textLabel.numberOfLines = 0;
-		self.textLabel.text = title;
-		self.key = key;
-		self.setting = [BOSetting settingWithKey:self.key];
-	}
-	
-	return self;
+- (instancetype)initWithTitle:(NSString *)title key:(NSString *)key userDefaults:(NSUserDefaults *)userDefaults handler:(void (^)(id cell))handler {
+    if (self = [self initWithStyle:(key ? UITableViewCellStyleValue1 : UITableViewCellStyleDefault) reuseIdentifier:nil]) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        [self setup];
+        if (handler) handler(self);
+        self.preservesSuperviewLayoutMargins = NO;
+        self.clipsToBounds = YES;
+        self.textLabel.numberOfLines = 0;
+        self.textLabel.text = title;
+        self.key = key;
+        self.setting = [BOSetting settingWithKey:self.key userDefaults:userDefaults];
+    }
+    
+    return self;
 }
 
 - (void)setExpansionView:(UIView *)expansionView {
@@ -67,7 +67,11 @@
 }
 
 + (instancetype)cellWithTitle:(NSString *)title key:(NSString *)key handler:(void (^)(id cell))handler {
-	return [[self alloc] initWithTitle:title key:key handler:handler];
+	return [[self alloc] initWithTitle:title key:key userDefaults:nil handler:handler];
+}
+
++ (instancetype)cellWithTitle:(NSString *)title key:(NSString *)key userDefaults:(NSUserDefaults*)userDefaults handler:(void (^)(id cell))handler {
+    return [[self alloc] initWithTitle:title key:key userDefaults:userDefaults handler:handler];
 }
 
 - (void)layoutSubviews {

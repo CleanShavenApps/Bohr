@@ -51,5 +51,6 @@
  *	@param handler A block passed in order to set up anything in the cell.
  **/
 + (instancetype)cellWithTitle:(NSString *)title key:(NSString *)key handler:(void (^)(id cell))handler;
++ (instancetype)cellWithTitle:(NSString *)title key:(NSString *)key userDefaults:(NSUserDefaults*)userDefaults handler:(void (^)(id cell))handler;
 
 @end
