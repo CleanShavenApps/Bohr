@@ -158,14 +158,32 @@
 	BOTableViewCell *cell = (BOTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
 	
 	if ([cell expansionHeight] > 0) {
-		self.expansionIndexPath = ![indexPath isEqual:self.expansionIndexPath] ? indexPath : nil;
+		
+		BOOL isExpanding = ![indexPath isEqual:self.expansionIndexPath];
+		
+		if (isExpanding)
+		{
+			if (![self shouldExpandCell:cell atIndexPath:indexPath])
+			{
+				goto deselect;
+			}
+		}
+		else
+		{
+			if (![self shouldCollapseCell:cell atIndexPath:indexPath])
+			{
+				goto deselect;
+			}
+		}
+		
+		self.expansionIndexPath = isExpanding ? indexPath : nil;
 		
 		[self.tableView deselectRowAtIndexPath:indexPath animated:NO];
 		[self.tableView beginUpdates];
 		[self.tableView endUpdates];
 		[self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 		
-		if (self.expansionIndexPath)
+		if (isExpanding)
 		{
 			[self didExpandCell:cell atIndexPath:indexPath];
 		}
@@ -179,6 +197,8 @@
 	} else if ([cell respondsToSelector:@selector(wasSelectedFromViewController:)]) {
 		[cell wasSelectedFromViewController:self];
 	}
+	
+deselect:
 	
 	if (cell.accessoryType != UITableViewCellAccessoryDisclosureIndicator) {
 		[self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -287,6 +307,8 @@
 	self.sections = [NSArray new];
 	self.footerViews = nil;
 }
+- (BOOL)shouldExpandCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath { return YES; }
+- (BOOL)shouldCollapseCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath { return YES; }
 - (void)didExpandCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {}
 - (void)didCollapseCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {}
 
