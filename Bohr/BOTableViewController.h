@@ -14,8 +14,8 @@
 /// The array of BOTableViewSections of the controller.
 @property (nonatomic, readonly) NSArray *sections;
 
-/// The setup method for the controller.
-- (void)setup;
+/// The setup method for the controller. Call super implementation before adding sections.
+- (void)setup NS_REQUIRES_SUPER;
 
 /// Adds a new section to the controller.
 - (void)addSection:(BOTableViewSection *)section;

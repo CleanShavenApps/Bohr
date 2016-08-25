@@ -23,8 +23,6 @@
 @implementation BOTableViewController
 
 - (void)commonInit {
-	self.sections = [NSArray new];
-	
 	self.tableView.estimatedRowHeight = 55;
 	self.tableView.rowHeight = UITableViewAutomaticDimension;
 	self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
@@ -50,10 +48,12 @@
 }
 
 - (void)awakeFromNib {
+	[super awakeFromNib];
 	[self commonInit];
 }
 
 - (void)addSection:(BOTableViewSection *)section {
+	NSAssert(self.sections != nil, @"Did you call super's implementation before doing anything else in your -setup method?");
 	self.sections = [self.sections arrayByAddingObject:section];
 }
 
@@ -283,7 +283,10 @@
 
 #pragma mark Subclassing
 
-- (void)setup {}
+- (void)setup {
+	self.sections = [NSArray new];
+	self.footerViews = nil;
+}
 - (void)didExpandCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {}
 - (void)didCollapseCell:(BOTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {}
 
